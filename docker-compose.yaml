@@ -1,0 +1,49 @@
+version: "3.7"
+services:
+  app:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    container_name: todo-app
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+    working_dir: /var/www/
+    volumes:
+      - ./:/var/www:delegated
+    networks:
+      - todo
+
+  db:
+    image: mysql:5.7
+    container_name: todo-db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: todo
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_PASSWORD: root
+      MYSQL_USER: user
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    ports:
+      - 3306:3306
+    volumes:
+      - ./docker/mysql:/docker-entrypoint-initdb.d
+    networks:
+      - todo
+
+  nginx:
+    image: nginx:alpine
+    container_name: todo-nginx
+    restart: unless-stopped
+    ports:
+      - 8080:80
+    volumes:
+      - ./:/var/www:delegated
+      - ./docker/nginx:/etc/nginx/conf.d/
+    networks:
+      - todo
+
+networks:
+  todo:
+    driver: bridge
