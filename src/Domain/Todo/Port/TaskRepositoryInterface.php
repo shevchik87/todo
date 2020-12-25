@@ -8,6 +8,8 @@ use App\Domain\Todo\Entity\TaskEntity;
 
 interface TaskRepositoryInterface
 {
+
+    public function get(int $id): TaskEntity;
     public function add(TaskEntity $entity): TaskEntity;
     public function save(TaskEntity $entity): void;
 }

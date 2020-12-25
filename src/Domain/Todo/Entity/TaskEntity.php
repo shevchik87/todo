@@ -7,19 +7,36 @@ namespace App\Domain\Todo\Entity;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
+
+/**
+ * Class TaskEntity
+ * @package App\Domain\Todo\Entity
+ * @ORM\Entity()
+ */
 class TaskEntity
 {
     const STATUS_NEW = 10;
     const STATUS_COMPLETE = 20;
     const STATUS_ARCHIVE = 30;
     const STATUS_DELETED = 40;
+
     /**
      * @var integer
+     * @ORM\Id()
+     * @ORM\GeneratedValue()
+     * @ORM\Column(type="integer")
      */
     private $id;
 
     /**
+     * @var int
+     * @ORM\Column(type="integer", name="user_id")
+     */
+    private $userId;
+
+    /**
      * @var string
+     * @ORM\Column(type="text")
      */
     private $content;
 
@@ -31,16 +48,19 @@ class TaskEntity
 
     /**
      * @var DateTime
+     * @ORM\Column(name="created_at", type="datetime")
      */
     private $createdAt;
 
     /**
      * @var DateTime
+     * @ORM\Column(name="updated_at", type="datetime")
      */
     private $updatedAt;
 
     /**
      * @var int
+     * @ORM\Column(type="smallint", name="status")
      */
     private $status;
 

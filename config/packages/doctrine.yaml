@@ -13,6 +13,6 @@ doctrine:
             Todo:
                 is_bundle: false
                 type: annotation
-                dir: '%kernel.project_dir%/src/Domain/Todo/Entity'
-                prefix: 'App\Entity'
+                dir: '%kernel.project_dir%/src/Domain/Todo/Entity/'
+                prefix: 'App\Domain\Todo\Entity'
                 alias: Todo

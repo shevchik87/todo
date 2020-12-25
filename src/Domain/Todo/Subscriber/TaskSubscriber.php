@@ -18,6 +18,6 @@ class TaskSubscriber implements EventSubscriberInterface
 
     public function onCreate(TaskCreatedEvent $event)
     {
-        var_dump($event);die;
+        var_dump($event);
     }
 }

@@ -6,5 +6,6 @@ RUN docker-php-ext-install pdo_mysql
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 WORKDIR /var/www
 
-CMD composer install ; wait-for-it database:3306 -- bin/console doctrine:migrations:migrate --no-interaction;  php-fpm
+CMD composer install
+CMD php-fpm
 EXPOSE 9000
