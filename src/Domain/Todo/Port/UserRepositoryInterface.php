@@ -8,5 +8,5 @@ use App\Domain\Todo\Entity\UserEntity;
 
 interface UserRepositoryInterface
 {
-    public function findByToken(string $token): UserEntity;
+    public function findByToken(string $token): ?UserEntity;
 }

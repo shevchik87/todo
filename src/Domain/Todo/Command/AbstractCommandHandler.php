@@ -5,9 +5,7 @@ declare(strict_types=1);
 namespace App\Domain\Todo\Command;
 
 use App\Domain\Todo\Command\Create\TaskCreateCommand;
-use App\Domain\Todo\DomainEvent\TaskCreatedEvent;
 use App\Domain\Todo\DomainEvent\TodoDomainEvent;
-use App\Domain\Todo\Entity\TaskEntity;
 use App\Domain\Todo\Exception\DomainException;
 use App\Domain\Todo\Port\EventPublisherInterface;
 use App\Domain\Todo\Port\TaskRepositoryInterface;

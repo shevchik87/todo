@@ -12,6 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Class TaskEntity
  * @package App\Domain\Todo\Entity
  * @ORM\Entity()
+ * @ORM\Table(name="tasks")
  */
 class TaskEntity
 {
@@ -41,7 +42,7 @@ class TaskEntity
     private $content;
 
     /**
-     * @var string
+     * @var DateTime|null
      * @ORM\Column(name="due_date", type="date")
      */
     private $dueDate;
@@ -63,6 +64,24 @@ class TaskEntity
      * @ORM\Column(type="smallint", name="status")
      */
     private $status;
+
+    /**
+     * @return int
+     */
+    public function getUserId(): int
+    {
+        return $this->userId;
+    }
+
+    /**
+     * @param int $userId
+     * @return $this
+     */
+    public function setUserId(int $userId)
+    {
+        $this->userId = $userId;
+        return $this;
+    }
 
     /**
      * @return int
@@ -101,18 +120,18 @@ class TaskEntity
     }
 
     /**
-     * @return string
+     * @return DateTime|null
      */
-    public function getDueDate(): ?string
+    public function getDueDate(): ?DateTime
     {
         return $this->dueDate;
     }
 
     /**
-     * @param string $dueDate
+     * @param DateTime $dueDate
      * @return $this
      */
-    public function setDueDate(?string $dueDate)
+    public function setDueDate(?DateTime $dueDate)
     {
         $this->dueDate = $dueDate;
         return $this;

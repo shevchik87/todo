@@ -17,9 +17,19 @@ class DoctrineUserRepository extends ServiceEntityRepository implements UserRepo
     }
 
 
-    public function findByToken(string $token): UserEntity
+    /**
+     * @param string $token
+     * @return UserEntity|null
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function findByToken(string $token): ?UserEntity
     {
-        return new UserEntity();
+        return $this->createQueryBuilder('u')
+            ->andWhere('u.token = :val')
+            ->setParameter('val', $token)
+            ->getQuery()
+            ->getOneOrNullResult()
+            ;
     }
 
 }

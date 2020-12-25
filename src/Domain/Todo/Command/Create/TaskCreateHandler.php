@@ -12,12 +12,22 @@ use App\Domain\Todo\Entity\TaskEntity;
 
 class TaskCreateHandler extends AbstractCommandHandler
 {
+    /**
+     * @param CommandInterface|TaskCreateCommand $command
+     * @return TodoDomainEvent
+     * @throws \Exception
+     */
     public function handle(CommandInterface $command): TodoDomainEvent
     {
+        $date = null;
+        if ($command->getDueDate()) {
+            $date = \DateTime::createFromFormat("Y-m-d", $command->getDueDate());
+        }
         $task = new TaskEntity();
         $task
             ->setContent($command->getContent())
-            ->setDueDate($command->getDueDate())
+            ->setDueDate($date)
+            ->setUserId($command->getUserId())
             ->setStatus(TaskEntity::STATUS_NEW)
             ->setCreatedAt(new \DateTime());
 

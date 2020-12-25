@@ -18,7 +18,10 @@ class DoctrineTaskRepository extends ServiceEntityRepository implements TaskRepo
 
     public function add(TaskEntity $entity): TaskEntity
     {
-        $entity->setId(23);
+        $em = $this->getEntityManager();
+        $em->persist($entity);
+        $em->flush();
+
         return $entity;
     }
 

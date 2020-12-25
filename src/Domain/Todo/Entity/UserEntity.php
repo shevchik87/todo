@@ -11,14 +11,14 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * Class UserEntity
  * @package App\Domain\Todo\Entity
  * @ORM\Entity()
+ * @ORM\Table(name="users")
  */
 class UserEntity implements UserInterface
 {
     /**
      * @var integer
-     * @ORM\Column()
+     * @ORM\Column(type="integer")
      * @ORM\Id()
-     * @ORM\GeneratedValue()
      */
     private $id;
 
@@ -33,6 +33,36 @@ class UserEntity implements UserInterface
      * @ORM\Column(name="token", type="string", unique=true)
      */
     private $token;
+
+    /**
+     * @param int $id
+     * @return $this
+     */
+    public function setId(int $id)
+    {
+        $this->id = $id;
+        return $this;
+    }
+
+    /**
+     * @param string $userName
+     * @return $this
+     */
+    public function setUserName(string $userName)
+    {
+        $this->userName = $userName;
+        return $this;
+    }
+
+    /**
+     * @param string $token
+     * @return $this
+     */
+    public function setToken(string $token)
+    {
+        $this->token = $token;
+        return $this;
+    }
 
     /**
      * @return int
