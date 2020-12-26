@@ -4,20 +4,20 @@ declare(strict_types=1);
 
 namespace App\Domain\Todo\Command\Create;
 
-use App\Domain\Todo\Command\AbstractCommandHandler;
+use App\Domain\Todo\Command\AbstractTaskCommandHandler;
 use App\Domain\Todo\Command\CommandInterface;
 use App\Domain\Todo\DomainEvent\TaskCreatedEvent;
 use App\Domain\Todo\DomainEvent\TodoDomainEvent;
 use App\Domain\Todo\Entity\TaskEntity;
 
-class TaskCreateHandler extends AbstractCommandHandler
+class TaskCreateHandlerTask extends AbstractTaskCommandHandler
 {
     /**
-     * @param CommandInterface|TaskCreateCommand $command
-     * @return TodoDomainEvent
+     * @param CommandInterface $command
+     * @return TaskEntity
      * @throws \Exception
      */
-    public function handle(CommandInterface $command): TodoDomainEvent
+    public function handle(CommandInterface $command): TaskEntity
     {
         $date = null;
         if ($command->getDueDate()) {
@@ -33,6 +33,8 @@ class TaskCreateHandler extends AbstractCommandHandler
 
         $task = $this->repository->add($task);
 
-        return new TaskCreatedEvent($task);
+        $task->setEvents(new TaskCreatedEvent($task));
+
+        return $task;
     }
 }

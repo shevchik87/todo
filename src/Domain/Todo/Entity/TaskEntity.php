@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace App\Domain\Todo\Entity;
 
+use App\Domain\Todo\DomainEvent\TodoDomainEvent;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as Serializer;
 
 
 /**
@@ -26,30 +28,36 @@ class TaskEntity
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     *
+     * @Serializer\Groups({"create"})
      */
     private $id;
 
     /**
      * @var int
      * @ORM\Column(type="integer", name="user_id")
+     * @Serializer\Groups({"create"})
      */
     private $userId;
 
     /**
      * @var string
      * @ORM\Column(type="text")
+     * @Serializer\Groups({"create"})
      */
     private $content;
 
     /**
      * @var DateTime|null
      * @ORM\Column(name="due_date", type="date")
+     * @Serializer\Groups({"create"})
      */
     private $dueDate;
 
     /**
      * @var DateTime
      * @ORM\Column(name="created_at", type="datetime")
+     * @Serializer\Groups({"create"})
      */
     private $createdAt;
 
@@ -62,8 +70,14 @@ class TaskEntity
     /**
      * @var int
      * @ORM\Column(type="smallint", name="status")
+     * @Serializer\Groups({"create"})
      */
     private $status;
+
+    /**
+     * @var array
+     */
+    private $events = [];
 
     /**
      * @return int
@@ -189,5 +203,15 @@ class TaskEntity
     {
         $this->status = $status;
         return $this;
+    }
+
+    public function setEvents(TodoDomainEvent $event)
+    {
+        $this->events[] = $event;
+    }
+
+    public function getEvents()
+    {
+        return $this->events;
     }
 }

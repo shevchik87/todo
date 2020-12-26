@@ -18,6 +18,7 @@ class TaskCreateCommand implements CommandInterface
     /**
      * @var string|null
      * @Assert\Date()
+     * @Assert\Expression("this.getDueDate() >= this.getCurrentDate()", message="Incorrect date")
      */
     private $dueDate;
 
@@ -63,5 +64,10 @@ class TaskCreateCommand implements CommandInterface
     public function getUserId(): int
     {
         return $this->userId;
+    }
+
+    public function getCurrentDate()
+    {
+        return date('Y-m-d');
     }
 }

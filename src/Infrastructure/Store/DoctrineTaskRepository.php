@@ -27,11 +27,13 @@ class DoctrineTaskRepository extends ServiceEntityRepository implements TaskRepo
 
     public function save(TaskEntity $entity): void
     {
-        // TODO: Implement save() method.
+        $em = $this->getEntityManager();
+        $em->persist($entity);
+        $em->flush();
     }
 
     public function get(int $id): TaskEntity
     {
-        return new TaskEntity();
+        return $this->find($id);
     }
 }

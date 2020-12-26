@@ -4,15 +4,14 @@ declare(strict_types=1);
 
 namespace App\Domain\Todo\Command;
 
-use App\Domain\Todo\Command\Create\TaskCreateCommand;
-use App\Domain\Todo\DomainEvent\TodoDomainEvent;
+use App\Domain\Todo\Entity\TaskEntity;
 use App\Domain\Todo\Exception\DomainException;
 use App\Domain\Todo\Port\EventPublisherInterface;
 use App\Domain\Todo\Port\TaskRepositoryInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-abstract class AbstractCommandHandler
+abstract class AbstractTaskCommandHandler
 {
 
     /**
@@ -31,7 +30,7 @@ abstract class AbstractCommandHandler
     protected $publisher;
 
     /**
-     * TaskCreateHandler constructor.
+     * TaskCreateHandlerTask constructor.
      * @param ValidatorInterface $validator
      * @param TaskRepositoryInterface $repository
      * @param EventPublisherInterface $publisher
@@ -44,7 +43,8 @@ abstract class AbstractCommandHandler
     }
 
     /**
-     * @param CommandInterface|TaskCreateCommand $command
+     * @param CommandInterface $command
+     * @return TaskEntity
      * @throws DomainException
      */
     public function execute(CommandInterface $command)
@@ -54,9 +54,13 @@ abstract class AbstractCommandHandler
             throw new DomainException($errors[0]->getMessage(), Response::HTTP_BAD_REQUEST);
         }
 
-        $event = $this->handle($command);
-        $this->publisher->publish($event);
+        $taskEntity = $this->handle($command);
+        foreach ($taskEntity->getEvents() as $event) {
+            $this->publisher->publish($event);
+        }
+
+        return $taskEntity;
     }
 
-    abstract public function handle(CommandInterface $command): TodoDomainEvent;
+    abstract protected function handle(CommandInterface $command): TaskEntity;
 }

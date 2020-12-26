@@ -28,4 +28,12 @@ class TaskCompletedEvent implements TodoDomainEvent
     {
         return $this->eventDate;
     }
+
+    /**
+     * @return int
+     */
+    public function getTaskId(): int
+    {
+        return $this->taskId;
+    }
 }

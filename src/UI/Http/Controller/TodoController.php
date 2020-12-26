@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace App\UI\Http\Controller;
 
+use App\Domain\Todo\Command\Complete\TaskCompleteCommand;
+use App\Domain\Todo\Command\Complete\TaskCompleteHandlerTask;
 use App\Domain\Todo\Command\Create\TaskCreateCommand;
-use App\Domain\Todo\Command\Create\TaskCreateHandler;
+use App\Domain\Todo\Command\Create\TaskCreateHandlerTask;
 use App\Domain\Todo\Entity\TaskEntity;
 use App\Domain\Todo\Exception\DomainException;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -37,6 +39,7 @@ class TodoController extends BaseApiController
             return $this->json("", Response::HTTP_NOT_FOUND);
         }
 
+        $this->denyAccessUnlessGranted('view', $task);
 
         return $this->json($this->arrayResponse($task));
 
@@ -45,24 +48,50 @@ class TodoController extends BaseApiController
     /**
      * @Route("/api/v1/tasks", methods={"POST"})
      * @param Request $request
-     * @param TaskCreateHandler $handler
+     * @param TaskCreateHandlerTask $handler
      * @throws DomainException
      */
-    public function createTask(Request $request, TaskCreateHandler $handler)
+    public function createTask(Request $request, TaskCreateHandlerTask $handler)
     {
         $userId = $this->getUser()->getId();
         $data = json_decode($request->getContent(), true);
-        $command = new TaskCreateCommand($userId, $data['content'], $data['due_date']);
+        $command = new TaskCreateCommand($userId, $data['content'], $data['due_date'] ?? null);
+
+        $task = $handler->execute($command);
+
+        return $this->arrayResponse($task, ['create']);
+    }
+
+    /**
+     * @Route("/api/v1/tasks/{id}/complete", methods={"PATCH"})
+     * @param int $id
+     * @param TaskCompleteHandlerTask $handler
+     * @return JsonResponse
+     * @throws DomainException
+     */
+    public function completeTask(int $id, TaskCompleteHandlerTask $handler)
+    {
+        $task = $this->findTask($id);
+
+        $this->denyAccessUnlessGranted('edit', $task);
+
+        $command = new TaskCompleteCommand($id);
 
         $handler->execute($command);
 
-        $url = $this->generateUrl("get_task", ['id' => 1], UrlGeneratorInterface::ABSOLUTE_URL);
-        return $this->json(null, Response::HTTP_CREATED, ["Location" => $url]);
-
+        return new JsonResponse(null);
     }
 
-    public function closeTask(int $id)
-    {
 
+    private function findTask(int $id)
+    {
+        $task = $this->getDoctrine()->getRepository(TaskEntity::class)
+            ->find($id);
+
+        if (!$task) {
+            $this->createNotFoundException();
+        }
+
+        return $task;
     }
 }

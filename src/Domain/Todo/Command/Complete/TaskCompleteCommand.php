@@ -17,11 +17,12 @@ class TaskCompleteCommand implements CommandInterface
 
     /**
      * TaskCompleteCommand constructor.
-     * @param int $id
+     * @param int $taskId
+     * @param int $userId
      */
-    public function __construct(int $id)
+    public function __construct(int $taskId)
     {
-        $this->taskId = $id;
+        $this->taskId = $taskId;
     }
 
     /**
