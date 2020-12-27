@@ -14,7 +14,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class TodoController extends BaseApiController
 {
@@ -29,6 +28,7 @@ class TodoController extends BaseApiController
     /**
      * @Route("/api/v1/tasks/{id}", name="get_task", methods={"GET"})
      * @param int $id
+     * @return JsonResponse
      */
     public function getTask(int $id)
     {
@@ -49,6 +49,7 @@ class TodoController extends BaseApiController
      * @Route("/api/v1/tasks", methods={"POST"})
      * @param Request $request
      * @param TaskCreateHandlerTask $handler
+     * @return array|null
      * @throws DomainException
      */
     public function createTask(Request $request, TaskCreateHandlerTask $handler)
@@ -66,7 +67,7 @@ class TodoController extends BaseApiController
      * @Route("/api/v1/tasks/{id}/complete", methods={"PATCH"})
      * @param int $id
      * @param TaskCompleteHandlerTask $handler
-     * @return JsonResponse
+     * @return bool
      * @throws DomainException
      */
     public function completeTask(int $id, TaskCompleteHandlerTask $handler)
@@ -79,7 +80,7 @@ class TodoController extends BaseApiController
 
         $handler->execute($command);
 
-        return new JsonResponse(null);
+        return true;
     }
 
 
