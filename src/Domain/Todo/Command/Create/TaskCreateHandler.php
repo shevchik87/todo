@@ -10,7 +10,7 @@ use App\Domain\Todo\DomainEvent\TaskCreatedEvent;
 use App\Domain\Todo\DomainEvent\TodoDomainEvent;
 use App\Domain\Todo\Entity\TaskEntity;
 
-class TaskCreateHandlerTask extends AbstractTaskCommandHandler
+class TaskCreateHandler extends AbstractTaskCommandHandler
 {
     /**
      * @param CommandInterface $command

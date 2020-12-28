@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
 
@@ -63,9 +64,13 @@ class ApiResponseSubscriber implements EventSubscriberInterface
     {
         $httpCode = Response::HTTP_INTERNAL_SERVER_ERROR;
         $ex = $event->getThrowable();
-        if ($ex instanceof \HttpException || $ex instanceof DomainException) {
+        if ($ex instanceof HttpException) {
+            $httpCode = $ex->getStatusCode();
+        }
+        if ($ex instanceof DomainException) {
             $httpCode = $ex->getCode();
         }
+
         $this->logException($ex, $ex->getMessage());
         $event->setResponse(
             $this->apiResponse->createFromException($event->getThrowable(), $httpCode)

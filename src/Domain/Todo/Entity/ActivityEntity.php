@@ -5,13 +5,15 @@ declare(strict_types=1);
 namespace App\Domain\Todo\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use App\Infrastructure\Store\DoctrineActivityRepository;
 
 /**
  * Class ActivityEntity
  * @package App\Domain\Todo\Entity
  *
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass=DoctrineActivityRepository::class)
  * @ORM\Table(name="activities")
+ *
  */
 class ActivityEntity
 {

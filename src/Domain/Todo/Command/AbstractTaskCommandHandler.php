@@ -7,7 +7,7 @@ namespace App\Domain\Todo\Command;
 use App\Domain\Todo\Entity\TaskEntity;
 use App\Domain\Todo\Exception\DomainException;
 use App\Domain\Todo\Port\EventPublisherInterface;
-use App\Domain\Todo\Port\TaskRepositoryInterface;
+use App\Domain\Todo\Port\TaskWriteRepositoryInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -20,7 +20,7 @@ abstract class AbstractTaskCommandHandler
     protected $validator;
 
     /**
-     * @var TaskRepositoryInterface
+     * @var TaskWriteRepositoryInterface
      */
     protected $repository;
 
@@ -30,12 +30,12 @@ abstract class AbstractTaskCommandHandler
     protected $publisher;
 
     /**
-     * TaskCreateHandlerTask constructor.
+     * TaskCreateHandler constructor.
      * @param ValidatorInterface $validator
-     * @param TaskRepositoryInterface $repository
+     * @param TaskWriteRepositoryInterface $repository
      * @param EventPublisherInterface $publisher
      */
-    public function __construct(ValidatorInterface $validator, TaskRepositoryInterface $repository, EventPublisherInterface $publisher)
+    public function __construct(ValidatorInterface $validator, TaskWriteRepositoryInterface $repository, EventPublisherInterface $publisher)
     {
         $this->validator = $validator;
         $this->repository = $repository;
