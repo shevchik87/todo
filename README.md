@@ -46,6 +46,7 @@ Body example
 
 
 ``GET /api/v1/tasks`` - get all active tasks
+``GET /api/v1/tasks?date={date}`` - get all active tasks for specific date. Date should be string in Y-m-d format
 
 ``GET /api/v1/tasks/{id}`` - get specific task
 
